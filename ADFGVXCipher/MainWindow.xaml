@@ -1,0 +1,144 @@
+﻿<Window x:Class="ADFGVXCipher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ADFGVX Cipher" Height="700" Width="900"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="MinWidth" Value="100"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="5,5,5,0"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Шифр ADFGVX" FontSize="20" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+        <TabControl Grid.Row="1" Margin="0,5,0,5">
+            <TabItem Header="Шифрование">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Content="Исходное сообщение:" 
+                           ToolTip="Введите сообщение для шифрования (латинские буквы и цифры)"/>
+                    <TextBox Grid.Row="1" x:Name="txtEncryptInput" 
+                             TextWrapping="Wrap" AcceptsReturn="True"
+                             ToolTip="Можно использовать латинские буквы A-Z и цифры 0-9. Пробелы будут удалены."/>
+
+                    <Label Grid.Row="2" Content="Ключевая фраза для матрицы (опционально):"
+                           ToolTip="Введите ключевую фразу для генерации матрицы или оставьте пустым для матрицы по умолчанию"/>
+                    <TextBox Grid.Row="3" x:Name="txtEncryptMatrixKey"
+                             ToolTip="Дубликаты и недопустимые символы будут игнорированы"/>
+
+                    <Label Grid.Row="4" Content="Ключ перестановки:"
+                           ToolTip="Обязательное поле. Введите ключ для перестановки (любое слово)"/>
+                    <StackPanel Grid.Row="5" Orientation="Horizontal">
+                        <TextBox x:Name="txtEncryptTranspositionKey" Width="300"
+                                 ToolTip="Это поле обязательно для заполнения"/>
+                        <Button x:Name="btnEncrypt" Content="Зашифровать" 
+                                Click="BtnEncrypt_Click" Width="120"
+                                ToolTip="Нажмите для шифрования сообщения"/>
+                    </StackPanel>
+
+                    <Label Grid.Row="6" Content="Результат шифрования:"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Дешифрование">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Content="Зашифрованное сообщение:"
+                           ToolTip="Введите зашифрованное сообщение для расшифровки"/>
+                    <TextBox Grid.Row="1" x:Name="txtDecryptInput" 
+                             TextWrapping="Wrap" AcceptsReturn="True"
+                             ToolTip="Можно использовать только символы A, D, F, G, V, X"/>
+
+                    <Label Grid.Row="2" Content="Ключевая фраза для матрицы (опционально):"
+                           ToolTip="Должна совпадать с ключевой фразой, использованной при шифровании"/>
+                    <TextBox Grid.Row="3" x:Name="txtDecryptMatrixKey"
+                             ToolTip="Оставьте пустым, если при шифровании использовалась матрица по умолчанию"/>
+
+                    <Label Grid.Row="4" Content="Ключ перестановки:"
+                           ToolTip="Обязательное поле. Должен совпадать с ключом, использованным при шифровании"/>
+                    <StackPanel Grid.Row="5" Orientation="Horizontal">
+                        <TextBox x:Name="txtDecryptTranspositionKey" Width="300"
+                                 ToolTip="Это поле обязательно для заполнения"/>
+                        <Button x:Name="btnDecrypt" Content="Дешифровать" 
+                                Click="BtnDecrypt_Click" Width="120"
+                                ToolTip="Нажмите для дешифрования сообщения"/>
+                    </StackPanel>
+
+                    <Label Grid.Row="6" Content="Результат дешифрования:"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Просмотр матрицы">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Content="Ключевая фраза для матрицы:"
+                           ToolTip="Введите ключевую фразу для просмотра соответствующей матрицы"/>
+                    <TextBox Grid.Row="1" x:Name="txtMatrixPreviewKey"
+                             ToolTip="Оставьте пустым для просмотра матрицы по умолчанию"/>
+                    <Button Grid.Row="2" x:Name="btnShowMatrix" Content="Показать матрицу" 
+                            Click="BtnShowMatrix_Click" HorizontalAlignment="Left"
+                            ToolTip="Нажмите для генерации и отображения матрицы"/>
+                    <TextBox Grid.Row="3" x:Name="txtMatrixDisplay" 
+                             IsReadOnly="True" FontFamily="Consolas" 
+                             TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                             ToolTip="Здесь отображается сгенерированная матрица"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
+        <TextBox Grid.Row="2" x:Name="txtResult" 
+                 IsReadOnly="True" TextWrapping="Wrap" 
+                 Height="100" VerticalScrollBarVisibility="Auto"
+                 FontFamily="Consolas"
+                 ToolTip="Здесь отображается результат операции шифрования или дешифрования"/>
+    </Grid>
+</Window>

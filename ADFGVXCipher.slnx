@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ADFGVXCipher.Tests/ADFGVXCipher.Tests.csproj" />
+  <Project Path="ADFGVXCipher/ADFGVXCipher.csproj" />
+</Solution>
